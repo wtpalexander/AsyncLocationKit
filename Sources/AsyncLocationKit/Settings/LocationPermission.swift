@@ -8,6 +8,6 @@
 import Foundation
 
 public enum LocationPermission {
-    case always
+//    case always
     case whenInUsage
 }

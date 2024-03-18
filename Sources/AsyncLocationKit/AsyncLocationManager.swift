@@ -154,47 +154,47 @@ public final class AsyncLocationManager {
         })
     }
     
-#if !APPCLIP && !os(tvOS)
-    @available(*, deprecated, message: "Use new function requestPermission(with:)")
-    @available(watchOS 7.0, *)
-    @available(iOS 14, *)
-    public func requestAuthorizationAlways() async -> CLAuthorizationStatus {
-        let authorizationPerformer = RequestAuthorizationPerformer(currentStatus: getAuthorizationStatus())
-        return await withTaskCancellationHandler(operation: {
-            await withCheckedContinuation { continuation in
-#if os(macOS)
-                if #available(iOS 14, *), locationManager.authorizationStatus != .notDetermined {
-                    continuation.resume(with: .success(locationManager.authorizationStatus))
-                } else {
-                    authorizationPerformer.linkContinuation(continuation)
-                    proxyDelegate.addPerformer(authorizationPerformer)
-                    locationManager.requestAlwaysAuthorization()
-                }
-#else
-                if #available(iOS 14, *), locationManager.authorizationStatus != .notDetermined && locationManager.authorizationStatus != .authorizedWhenInUse {
-                    continuation.resume(with: .success(locationManager.authorizationStatus))
-                } else {
-                    authorizationPerformer.linkContinuation(continuation)
-                    proxyDelegate.addPerformer(authorizationPerformer)
-                    locationManager.requestAlwaysAuthorization()
-                }
-#endif
-            }
-        }, onCancel: {
-            proxyDelegate.cancel(for: authorizationPerformer.uniqueIdentifier)
-        })
-    }
-#endif
+//#if !APPCLIP && !os(tvOS)
+//    @available(*, deprecated, message: "Use new function requestPermission(with:)")
+//    @available(watchOS 7.0, *)
+//    @available(iOS 14, *)
+//    public func requestAuthorizationAlways() async -> CLAuthorizationStatus {
+//        let authorizationPerformer = RequestAuthorizationPerformer(currentStatus: getAuthorizationStatus())
+//        return await withTaskCancellationHandler(operation: {
+//            await withCheckedContinuation { continuation in
+//#if os(macOS)
+//                if #available(iOS 14, *), locationManager.authorizationStatus != .notDetermined {
+//                    continuation.resume(with: .success(locationManager.authorizationStatus))
+//                } else {
+//                    authorizationPerformer.linkContinuation(continuation)
+//                    proxyDelegate.addPerformer(authorizationPerformer)
+//                    locationManager.requestAlwaysAuthorization()
+//                }
+//#else
+//                if #available(iOS 14, *), locationManager.authorizationStatus != .notDetermined && locationManager.authorizationStatus != .authorizedWhenInUse {
+//                    continuation.resume(with: .success(locationManager.authorizationStatus))
+//                } else {
+//                    authorizationPerformer.linkContinuation(continuation)
+//                    proxyDelegate.addPerformer(authorizationPerformer)
+//                    locationManager.requestAlwaysAuthorization()
+//                }
+//#endif
+//            }
+//        }, onCancel: {
+//            proxyDelegate.cancel(for: authorizationPerformer.uniqueIdentifier)
+//        })
+//    }
+//#endif
     
     @available(watchOS 7.0, *)
     public func requestPermission(with permissionType: LocationPermission) async -> CLAuthorizationStatus {
         switch permissionType {
-        case .always:
-            #if APPCLIP
-            return await locationPermissionWhenInUse()
-            #else
-            return await locationPermissionAlways()
-            #endif
+//        case .always:
+//            #if APPCLIP
+//            return await locationPermissionWhenInUse()
+//            #else
+//            return await locationPermissionAlways()
+//            #endif
         case .whenInUsage:
             return await locationPermissionWhenInUse()
         }
@@ -366,34 +366,34 @@ extension AsyncLocationManager {
         })
     }
     
-    private func locationPermissionAlways() async -> CLAuthorizationStatus {
-        let authorizationPerformer = RequestAuthorizationPerformer(currentStatus: getAuthorizationStatus())
-        return await withTaskCancellationHandler(operation: {
-            await withCheckedContinuation { continuation in
-#if os(macOS)
-                if #available(iOS 14, watchOS 7, *), locationManager.authorizationStatus != .notDetermined {
-                    continuation.resume(with: .success(locationManager.authorizationStatus))
-                } else {
-                    authorizationPerformer.linkContinuation(continuation)
-                    proxyDelegate.addPerformer(authorizationPerformer)
-                    locationManager.requestAlwaysAuthorization()
-                }
-#else
-                if #available(iOS 14, tvOS 14, watchOS 7, *), locationManager.authorizationStatus != .notDetermined && locationManager.authorizationStatus != .authorizedWhenInUse {
-                    continuation.resume(with: .success(locationManager.authorizationStatus))
-                } else {
-                    #if !os(tvOS)
-                    authorizationPerformer.linkContinuation(continuation)
-                    proxyDelegate.addPerformer(authorizationPerformer)
-                    locationManager.requestAlwaysAuthorization()
-                    #endif
-                }
-#endif
-            }
-        }, onCancel: {
-            proxyDelegate.cancel(for: authorizationPerformer.uniqueIdentifier)
-        })
-    }
+//    private func locationPermissionAlways() async -> CLAuthorizationStatus {
+//        let authorizationPerformer = RequestAuthorizationPerformer(currentStatus: getAuthorizationStatus())
+//        return await withTaskCancellationHandler(operation: {
+//            await withCheckedContinuation { continuation in
+//#if os(macOS)
+//                if #available(iOS 14, watchOS 7, *), locationManager.authorizationStatus != .notDetermined {
+//                    continuation.resume(with: .success(locationManager.authorizationStatus))
+//                } else {
+//                    authorizationPerformer.linkContinuation(continuation)
+//                    proxyDelegate.addPerformer(authorizationPerformer)
+//                    locationManager.requestAlwaysAuthorization()
+//                }
+//#else
+//                if #available(iOS 14, tvOS 14, watchOS 7, *), locationManager.authorizationStatus != .notDetermined && locationManager.authorizationStatus != .authorizedWhenInUse {
+//                    continuation.resume(with: .success(locationManager.authorizationStatus))
+//                } else {
+//                    #if !os(tvOS)
+//                    authorizationPerformer.linkContinuation(continuation)
+//                    proxyDelegate.addPerformer(authorizationPerformer)
+//                    locationManager.requestAlwaysAuthorization()
+//                    #endif
+//                }
+//#endif
+//            }
+//        }, onCancel: {
+//            proxyDelegate.cancel(for: authorizationPerformer.uniqueIdentifier)
+//        })
+//    }
 
     @available(iOS 14, tvOS 14, watchOS 7, *)
     private func locationPermissionTemporaryFullAccuracy(purposeKey: String) async throws -> CLAccuracyAuthorization? {

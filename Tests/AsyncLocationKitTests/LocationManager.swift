@@ -35,12 +35,12 @@ class MockLocationManager: CLLocationManager {
         delegate?.locationManager?(self, didUpdateLocations: [location!])
     }
     
-    override func requestAlwaysAuthorization() {
-        _authStatus = .authorizedAlways
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.delegate?.locationManagerDidChangeAuthorization?(self)
-        }
-    }
+//    override func requestAlwaysAuthorization() {
+//        _authStatus = .authorizedAlways
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//            self.delegate?.locationManagerDidChangeAuthorization?(self)
+//        }
+//    }
     
     override func requestWhenInUseAuthorization() {
         _authStatus = .authorized
